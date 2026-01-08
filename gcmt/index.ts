@@ -1,7 +1,11 @@
 import { $ } from "bun";
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({});
+const ai = new GoogleGenAI({
+  googleAuthOptions: {
+    apiKey: process.env.GEMINI_API_KEY,
+  },
+});
 
 const model = "gemini-3-flash-preview";
 const systemInstruction = `
