@@ -1,4 +1,4 @@
-import { $ } from "bun";
+import { $, spawn, write } from "bun";
 import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({
@@ -37,7 +37,14 @@ async function main() {
     },
   });
 
-  console.log(response.text);
+  const resBytes = new TextEncoder().encode(response.text);
+  await spawn({
+    cmd: ["glow", "-"],
+    stdin: resBytes,
+    stdout: "inherit",
+    stderr: "inherit",
+  }).exited;
+  await write("/tmp/commit.md", resBytes);
 }
 
 main();
